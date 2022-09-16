@@ -1,6 +1,11 @@
 <?php
 
+use App\Models\Todo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ToDoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +19,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome')
+    ->with('todos', Todo::all());
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('index', [ToDoController::class, 'index'])->name('index');
+
+Route::resource('todos', ToDoController::class);
+Route::post('todos/create', [App\Http\Controllers\ToDoController::class, 'store'])->name('store');
