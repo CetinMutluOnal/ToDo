@@ -1,0 +1,12 @@
+.todoContainer{
+    display: flex;
+    justify-content: center;
+}
+.list-group li{
+    display: flex;
+    justify-content: space-between;
+}
+.update{
+    display: flex;
+    justify-content: space-between;
+}
