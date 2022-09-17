@@ -4,6 +4,7 @@ use App\Models\Todo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ToDoController;
 
@@ -25,10 +26,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('index', [ToDoController::class, 'index'])->name('index');
 
 Route::resource('todos', ToDoController::class);
 Route::post('todos/create', [App\Http\Controllers\ToDoController::class, 'store'])->name('store');
+
+Route::post('auth/login',[AuthController::class, 'login'])->name('login');
+Route::post('auth/logout',[AuthController::class, 'logout'])->name('logout');
+ROute::get('auth/login', [AuthController::class, 'loginForm'])->name('loginForm');
