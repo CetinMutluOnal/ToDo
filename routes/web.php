@@ -32,7 +32,6 @@ use App\Http\Controllers\ToDoController;
 
     });
 
-    Route::post('auth/logout',[AuthController::class, 'logout'])->name('logout');
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [ToDoController::class, 'index'])->name('index');
 
@@ -47,3 +46,5 @@ Auth::routes();
 
 Route::post('auth/login',[AuthController::class, 'login'])->name('login');
 ROute::get('auth/login', [AuthController::class, 'loginForm'])->name('loginForm');
+
+Route::post('auth/logout',[AuthController::class, 'logout'])->name('logout');
