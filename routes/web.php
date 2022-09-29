@@ -19,19 +19,31 @@ use App\Http\Controllers\ToDoController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome')
-    ->with('todos', Todo::all());
-});
+
+ Route::group(['middleware' => 'auth:web'], function() {
+
+    Route::get('/', function () {
+        if(Auth::check() == null){
+
+            return redirect()->route('login');
+        }
+
+        return redirect()->route('home');
+
+    });
+
+    Route::post('auth/logout',[AuthController::class, 'logout'])->name('logout');
+    Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::get('index', [ToDoController::class, 'index'])->name('index');
+
+
+    Route::post('todos/create', [App\Http\Controllers\ToDoController::class, 'store'])->name('store');
+    Route::resource('todos', ToDoController::class);
+
+ });
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('index', [ToDoController::class, 'index'])->name('index');
-
-Route::resource('todos', ToDoController::class);
-Route::post('todos/create', [App\Http\Controllers\ToDoController::class, 'store'])->name('store');
 
 Route::post('auth/login',[AuthController::class, 'login'])->name('login');
-Route::post('auth/logout',[AuthController::class, 'logout'])->name('logout');
 ROute::get('auth/login', [AuthController::class, 'loginForm'])->name('loginForm');
