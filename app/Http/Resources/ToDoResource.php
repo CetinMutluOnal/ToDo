@@ -18,6 +18,7 @@ class ToDoResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
+            'user' => $this->user_id,
         ];
     }
 }

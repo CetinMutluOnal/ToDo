@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ToDoResource;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ToDoResource;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Web\TodoRequest;
+
 
 class ToDoController extends Controller
 {
@@ -22,9 +25,14 @@ class ToDoController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(TodoRequest $request)
     {
-        $toDo = new Todo($request->only(['title', 'content']));
+        $user = Auth::user();
+
+        $toDo = new Todo($request->validated());
+        $toDo->user()->associate($user);
+
+
         $toDo->save();
 
         return response()->json(new ToDoResource($toDo));

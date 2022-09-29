@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Web\TodoRequest;
 
 class ToDoController extends Controller
 {
+
     public function index() {
-        return view('welcome')
+        return view('auth.login')
         ->with('todos', Todo::all());
     }
     public function show($id) {
@@ -25,13 +28,17 @@ class ToDoController extends Controller
         ->with('todos', Todo::all());
     }
 
-    public function store(Request $request) {
+    public function store(TodoRequest $request) {
 
-        $todo = new Todo($request->only(['title','content']));
+        $user = $request->user();
+
+        $todo = new Todo($request->validated());
+        $todo->user()->associate($user);
+
 
         $todo->save();
 
-        return redirect()->route('index')
+        return redirect()->route('home')
             ->with('success', trans('models.common.save'));
     }
 
@@ -53,6 +60,6 @@ class ToDoController extends Controller
 
         $toDo->delete();
 
-        return redirect('/todos')->with('success', 'Data Deleted');
+        return redirect('home')->with('success', 'Data Deleted');
     }
 }
